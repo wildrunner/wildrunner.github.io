@@ -1,6 +1,6 @@
 ---
 layout: post
-title: titanic survior prediction
+title: "titanic survior prediction"
 ---
 
 ## 개요
