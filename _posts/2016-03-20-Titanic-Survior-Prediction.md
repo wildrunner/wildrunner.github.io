@@ -40,7 +40,7 @@ test  <- read.csv("./test.csv")
 test$Survived <- 0
 ~~~
 
-다음으로 데이터 클린징 작업이 필요한데, train 데이터에서 곳곳에 비어있는 데이터를 채워주거나 기존 데이터에서 파생된 데이터를 얻고자 하는 작업도 한다. 원본 데이터가 항상 깨끗한 상태는 아니기 때문에 데이터 분석 전에 데이터를 정제하는 작업은 필수적이다.
+다음으로 데이터 클린징 작업이 필요한데, train 데이터에서 곳곳에 비어있는 데이터를 채워주거나 기존 데이터에서 파생된 데이터를 얻고자 하는 작업도 한다. 원본 데이터가 항상 깨끗한 상태는 아니기 때문에 데이터 분석 전에 데이터를 정제하는 작업은 필수다.
 
 ~~~ r
 ### CLEANING DATA ###
@@ -72,5 +72,51 @@ predicted_age <- rpart(Age ~ Pclass + Sex + SibSp + Parch + Fare + Embarked + Ti
                        data=combi[!is.na(combi$Age),], method="anova")
 combi$Age[is.na(combi$Age)] <- predict(predicted_age, combi[is.na(combi$Age),])
 ~~~
+
+나이, 성별, 승객등급, 가족수를 생존자 여부를 결정지을 변수로 생각하고 train 데이터로 모델을 만든다. 이 모델에 test 데이터를 넣어 생존자를 예측한다.
+
+~~~ r
+### CREATING MODEL ###
+train_new <- combi[1:891,]
+test_new <- combi[892:1309,]
+test_new$Survived <- NULL
+
+# 승무원 등급 판별
+train_new$Cabin <- substr(train_new$Cabin,1,1)
+train_new$Cabin[train_new$Cabin == ""] <- "H"
+train_new$Cabin[train_new$Cabin == "T"] <- "H"
+
+test_new$Cabin <- substr(test_new$Cabin,1,1)
+test_new$Cabin[test_new$Cabin == ""] <- "H"
+
+train_new$Cabin <- factor(train_new$Cabin)
+test_new$Cabin <- factor(test_new$Cabin)
+
+# train_new and test_new are available in the workspace
+str(train_new)
+str(test_new)
+
+# 나이, 성별, 승객등급, 가족수로 모델 구성
+my_tree <- rpart(Survived ~ Age + Sex + Pclass  + family_size, data = train_new, method = "class", control=rpart.control(cp=0.0001))
+summary(my_tree)
+
+# decision tree 시각화
+prp(my_tree, type = 1, extra = 100)
+
+# test 데이터를 모델에 적용
+my_prediction <- predict(my_tree, test_new, type = "class")
+head(my_prediction)
+
+# 승객 아이디와 생존 여부로 데이터 프레임 생성
+vector_passengerid <- test_new$PassengerId
+
+my_solution <- data.frame(PassengerId = vector_passengerid, Survived = my_prediction)
+
+head(my_solution)
+
+# csv 출력
+write.csv(my_solution, file = "my_solution.csv",row.names=FALSE)
+~~~
+
 
 
