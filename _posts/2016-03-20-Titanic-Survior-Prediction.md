@@ -32,7 +32,7 @@ embarked        Port of Embarkation
 ~~~ r
 ### LIBRARY CALL ###
 library("rpart")
-library("rpart.plot")	
+library("rpart.plot")
 
 ### READING DATA ###
 train <- read.csv("./train.csv")
@@ -57,23 +57,17 @@ combi$Title[combi$Title %in% c('Capt', 'Don', 'Major', 'Sir', 'Col', 'Jonkheer',
 combi$Title[combi$Title %in% c('Dona')] <- 'Mrs'
 combi$Title <- factor(combi$Title)
 
-# Passenger on row 62 and 830 do not have a value for embarkment. 
-# Since many passengers embarked at Southampton, we give them the value S.
-# We code all embarkment codes as factors.
+# 62, 830번째 승객은 승선지가 없어 가장 많은 사람들이 승선한 Southampton을 승선지로 넣는다.
 combi$Embarked[c(62,830)] = "S"
 combi$Embarked <- factor(combi$Embarked)
 
-# Passenger on row 1044 has an NA Fare value. Let's replace it with the median fare value.
+# 1044번째 승객은 승선료가 없어 median 값으로 넣는다.
 combi$Fare[1044] <- median(combi$Fare, na.rm=TRUE)
 
-# Create new column -> family_size
+# family_size라는 컬럼을 생성한다.
 combi$family_size <- combi$SibSp + combi$Parch + 1
 
-
-# How to fill in missing Age values?
-# We make a prediction of a passengers Age using the other variables and a decision tree model. 
-# This time you give method="anova" since you are predicting a continuous variable.
-
+# 나이는 없는 경우를 위해 Pclass, Sex, SibSp, Parch, Fare, Embarked, Title, family_size를 기반으로 나이를 유추한다.
 predicted_age <- rpart(Age ~ Pclass + Sex + SibSp + Parch + Fare + Embarked + Title + family_size,
                        data=combi[!is.na(combi$Age),], method="anova")
 combi$Age[is.na(combi$Age)] <- predict(predicted_age, combi[is.na(combi$Age),])
