@@ -10,7 +10,20 @@ Kaggle의 Competitions는 어떤 주제에 대해 서로의 분석 및 예측 �
 kaggle에서는 train과 test 데이터셋을 제공하며 데이터셋 내에 각 변수는 다음과 같은 의미를 갖는다.
 
 ~~~
-survival
+survival        Survival
+                (0 = No; 1 = Yes)
+pclass          Passenger Class
+                (1 = 1st; 2 = 2nd; 3 = 3rd)
+name            Name
+sex             Sex
+age             Age
+sibsp           Number of Siblings/Spouses Aboard
+parch           Number of Parents/Children Aboard
+ticket          Ticket Number
+fare            Passenger Fare
+cabin           Cabin
+embarked        Port of Embarkation
+                (C = Cherbourg; Q = Queenstown; S = Southampton)
 ~~~
 
 
