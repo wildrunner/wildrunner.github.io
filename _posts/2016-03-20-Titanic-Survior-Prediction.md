@@ -38,9 +38,11 @@ library("rpart.plot")
 train <- read.csv("./train.csv")
 test  <- read.csv("./test.csv")
 test$Survived <- 0
-```
+~~~
+
 다음으로 데이터 클린징 작업이 필요한데, train 데이터에서 곳곳에 비어있는 데이터를 채워주거나 기존 데이터에서 파생된 데이터를 얻고자 하는 작업도 한다. 원본 데이터가 항상 깨끗한 상태는 아니기 때문에 데이터 분석 전에 데이터를 정제하는 작업은 필수적이다.
-```R
+
+~~~ r
 ### CLEANING DATA ###
 combi <- rbind(train, test)
 combi$Name <- as.character(combi$Name)
