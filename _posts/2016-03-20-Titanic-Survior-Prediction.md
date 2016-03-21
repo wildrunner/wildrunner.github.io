@@ -9,7 +9,7 @@ Kaggle의 Competitions는 어떤 주제에 대해 서로의 분석 및 예측 �
 ## 데이터셋
 kaggle에서는 train과 test 데이터셋을 제공하며 데이터셋 내에 각 변수는 다음과 같은 의미를 갖는다.
 
-~~~R
+~~~ r
 survival        Survival
                 (0 = No; 1 = Yes)
 pclass          Passenger Class
