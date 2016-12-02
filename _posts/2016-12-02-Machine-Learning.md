@@ -3,7 +3,7 @@ layout: post
 title: "Machine Learning - Start From Scratch"
 ---
 ## 개요
-
+..
 
 
 ## 번역이 AI를 만난 이유
